@@ -49,7 +49,7 @@ def new_game():
 
 def draw(c):
     global score1, score2, paddle1_pos, paddle2_pos, ball_pos, ball_vel, paddle1_vel, paddle2_vel
- 
+
     # update paddle's vertical position, keep paddle on the screen
     paddle1_pos += paddle1_vel
     paddle2_pos += paddle2_vel
@@ -72,16 +72,28 @@ def draw(c):
     # draw paddles
     c.draw_polygon([(0, paddle1_pos), (0, PAD_HEIGHT + paddle1_pos), (PAD_WIDTH, PAD_HEIGHT + paddle1_pos), (PAD_WIDTH, paddle1_pos)], 3, "White", "White")
     c.draw_polygon([((WIDTH - PAD_WIDTH - 1), paddle2_pos), ((WIDTH - PAD_WIDTH - 1), PAD_HEIGHT + paddle2_pos), (WIDTH, PAD_HEIGHT + paddle2_pos), (WIDTH, paddle2_pos)], 3, "White", "White")
-     
+
     # update ball
     ball_pos[0] += ball_vel[0]
     ball_pos[1] += ball_vel[1]
 
-    if ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS:
+    # right side
+    if ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] >= paddle2_pos and ball_pos[1] <= (paddle2_pos + PAD_HEIGHT):
         ball_vel[0] = -ball_vel[0]
 
-    if ball_pos[0] <= BALL_RADIUS + PAD_WIDTH:
+    # right side ball out
+    if (ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] < paddle2_pos) or (ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] > paddle2_pos + PAD_HEIGHT):
+        score1 += 1
+        ball_init(random.choice([True, False]))
+
+    # left side paddle
+    if ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] >= paddle1_pos and ball_pos[1] <= (paddle1_pos + PAD_HEIGHT):
         ball_vel[0] = -ball_vel[0]
+
+    # left side ball out
+    if (ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] < paddle1_pos) or (ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] > paddle1_pos + PAD_HEIGHT):
+        score2 += 1
+        ball_init(random.choice([True, False]))
 
     if ball_pos[1] >= (HEIGHT - 1) - BALL_RADIUS:
         ball_vel[1] = -ball_vel[1]
@@ -105,7 +117,7 @@ def keydown(key):
         paddle1_vel -= acc
     elif key==simplegui.KEY_MAP["s"]:
         paddle1_vel += acc
-   
+
 def keyup(key):
     global paddle1_vel, paddle2_vel
     acc = 2
