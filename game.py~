@@ -13,7 +13,7 @@ HALF_PAD_WIDTH = PAD_WIDTH / 2
 HALF_PAD_HEIGHT = PAD_HEIGHT / 2
 
 ball_pos = [WIDTH / 2, HEIGHT / 2]
-ball_vel = [0.0, 0.0]
+ball_vel = [0, 0]
 
 score1 = 0
 score2 = 0
@@ -30,9 +30,9 @@ def ball_init(right):
 
     ball_pos = [WIDTH / 2, HEIGHT / 2]
     if right == True:
-        ball_vel = [5.0,-4.0]
+        ball_vel = [5,-4]
     else:
-        ball_vel = [-5.0,-4.0]
+        ball_vel = [-5,-4]
 
 # define event handlers
 def new_game():
@@ -77,9 +77,9 @@ def draw(c):
     ball_pos[0] += ball_vel[0]
     ball_pos[1] += ball_vel[1]
 
-    # right side paddle
+    # right side
     if ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] >= paddle2_pos and ball_pos[1] <= (paddle2_pos + PAD_HEIGHT):
-        ball_vel[0] = -ball_vel[0] * 1.1
+        ball_vel[0] = -ball_vel[0]
 
     # right side ball out
     if (ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] < paddle2_pos) or (ball_pos[0] >= (WIDTH - 1 - PAD_WIDTH) - BALL_RADIUS and ball_pos[1] > paddle2_pos + PAD_HEIGHT):
@@ -88,7 +88,7 @@ def draw(c):
 
     # left side paddle
     if ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] >= paddle1_pos and ball_pos[1] <= (paddle1_pos + PAD_HEIGHT):
-        ball_vel[0] = -ball_vel[0] * 1.1
+        ball_vel[0] = -ball_vel[0]
 
     # left side ball out
     if (ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] < paddle1_pos) or (ball_pos[0] <= BALL_RADIUS + PAD_WIDTH and ball_pos[1] > paddle1_pos + PAD_HEIGHT):
@@ -108,7 +108,7 @@ def draw(c):
 
 def keydown(key):
     global paddle1_vel, paddle2_vel
-    acc = 5
+    acc = 2
     if key==simplegui.KEY_MAP["down"]:
         paddle2_vel += acc
     elif key==simplegui.KEY_MAP["up"]:
@@ -120,7 +120,7 @@ def keydown(key):
 
 def keyup(key):
     global paddle1_vel, paddle2_vel
-    acc = 5
+    acc = 2
     if key==simplegui.KEY_MAP["down"]:
         paddle2_vel -= acc
     elif key==simplegui.KEY_MAP["up"]:
